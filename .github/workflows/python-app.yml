@@ -24,7 +24,14 @@ jobs:
       uses: mr-smithers-excellent/docker-build-push@v5
       with:
         image: monziemeow/flask
-        tags: v3, latest
+        tags: ${{ github.sha }}
         registry: docker.io
         username: monziemeow
         password: dckr_pat_4lVUwuoINaClwREuxVm2N_ia7hE
+
+    - name: 'Deploy to Azure Web App'
+  	  uses: azure/webapps-deploy@v2
+	    with:
+	      app-name: 'cdgithubaction04-1'
+	      publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
+	      images: 'monziemeow/flask:${{ github.sha }}'
